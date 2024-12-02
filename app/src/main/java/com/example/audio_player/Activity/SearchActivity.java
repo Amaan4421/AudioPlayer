@@ -19,21 +19,25 @@ public class SearchActivity extends AppCompatActivity {
 
     @SuppressLint("MissingInflatedId")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
         //load the SearchSongFragment first where user can search songs
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
+        {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frame, new SearchSongFragment())
                     .commit();
-        }
+        }//end of if
+
 
         //set bottom navigation view and pass the references to change the page
         //eg. when user click search page then opens the SearchActivity
         bottomNavigationView = findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("UnsafeIntentLaunch")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item)
             {
@@ -66,7 +70,7 @@ public class SearchActivity extends AppCompatActivity {
                 return true;
             }//end of on click navigation
         });//end of on click method
-    }
+    }//end of onCreate
 
 
     //pass the search query to result page to show songs related to query
@@ -80,5 +84,5 @@ public class SearchActivity extends AppCompatActivity {
         transaction.replace(R.id.frame, searchResultFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-}
+    }//end of method
+}//end of class

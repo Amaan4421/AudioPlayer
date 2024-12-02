@@ -1,5 +1,6 @@
 package com.example.audio_player.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ public class LibraryActivity extends AppCompatActivity {
         //eg. when user click search page then opens the SearchActivity
         bottomNavigationView = findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("UnsafeIntentLaunch")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item)
             {
@@ -67,9 +69,10 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
     //method to load the fragment
-    private void loadFragment(Fragment fragment) {
+    private void loadFragment(Fragment fragment)
+    {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame, fragment);  // 'frame' is the id of FrameLayout in the activity_main.xml
+        transaction.replace(R.id.frame, fragment);
         transaction.commit();
     }
 }

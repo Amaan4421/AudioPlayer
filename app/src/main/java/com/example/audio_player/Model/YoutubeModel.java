@@ -8,12 +8,14 @@ import androidx.annotation.NonNull;
 
 public class YoutubeModel implements Parcelable
 {
+    //global variables
     private final String videoId;
     private final String videoTitle;
     private final String videoImageUrl;
     private final String videoUrl;
     private final String duration;
 
+    //constructor
     public YoutubeModel(String videoId, String videoTitle, String videoImageUrl, String videoUrl, String duration)
     {
         this.videoId = videoId;
@@ -23,6 +25,7 @@ public class YoutubeModel implements Parcelable
         this.duration = duration;
     }
 
+    //constructor for parsing arraylist
     protected YoutubeModel(Parcel in) {
         videoId = in.readString();
         videoTitle = in.readString();
@@ -43,6 +46,7 @@ public class YoutubeModel implements Parcelable
         }
     };
 
+    //getters for song details
     public String getVideoId(){ return videoId; }
     public String getVideoTitle()
     {

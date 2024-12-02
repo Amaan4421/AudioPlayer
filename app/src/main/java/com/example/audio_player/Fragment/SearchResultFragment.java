@@ -4,12 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -17,15 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.example.audio_player.Activity.MainActivity;
 import com.example.audio_player.Activity.PlayAudio;
 import com.example.audio_player.Adapter.ListAdapter;
 import com.example.audio_player.BuildConfig;
+import com.example.audio_player.Model.SongHistoryModel;
 import com.example.audio_player.Model.YoutubeModel;
 import com.example.audio_player.R;
 import com.example.audio_player.Utils.AudioExtractor;
+import com.example.audio_player.database_helper.HistoryDatabaseHelper;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequestInitializer;
@@ -104,10 +100,21 @@ public class SearchResultFragment extends Fragment
                 i.putExtra("title", youtubeModel.getVideoTitle());
                 i.putExtra("image", youtubeModel.getVideoImageUrl());
 
+                //extract url from song to play
                 AudioExtractor audioExtractor = new AudioExtractor(getContext());
                 audioExtractor.getAudioFileUrl(youtubeModel.getVideoUrl(), i, progressBar);
-            }
-        });//end of onClick method
+
+                //add that song into history
+                HistoryDatabaseHelper db = new HistoryDatabaseHelper(getContext());
+                SongHistoryModel songHistory = new SongHistoryModel();
+                songHistory.setSongTitle(youtubeModel.getVideoTitle());
+                songHistory.setSongImageUrl(youtubeModel.getVideoImageUrl());
+                songHistory.setSongVideoId(youtubeModel.getVideoId());
+                songHistory.setSongDuration(youtubeModel.getDuration());
+                songHistory.setVideoUrl(youtubeModel.getVideoUrl());
+                db.addSongToHistory(songHistory);
+            }//end of onClick
+        });//end of adapter
         searchResultList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         //set result in list
         searchResultList.setAdapter(adapter);
@@ -325,7 +332,7 @@ public class SearchResultFragment extends Fragment
         //replace first two char in duration value
         audioDuration = audioDuration.replace("PT", "");
 
-        //decalre variables to store time
+        //declare variables to store time
         int hours = 0, minutes = 0, seconds = 0;
 
 

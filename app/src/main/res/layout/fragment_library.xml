@@ -36,7 +36,7 @@
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
         android:layout_marginTop="90dp"
         android:padding="16dp"
         app:rowCount="2"
@@ -121,5 +121,38 @@
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:drawablePadding="8dp"/>
+
+        <android.widget.Button
+            android:id="@+id/import_playlist"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_margin="8dp"
+            android:text="Import Playlist"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:background="@drawable/toolbar_bg"
+            android:gravity="center"
+            android:drawableTop="@drawable/baseline_import_export_24"
+            android:drawableTint="@color/pink"
+            android:padding="16dp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            app:layout_rowWeight="1"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:drawablePadding="8dp"/>
     </androidx.gridlayout.widget.GridLayout>
+
+    <ProgressBar
+        android:id="@+id/showLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </FrameLayout>

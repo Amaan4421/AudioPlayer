@@ -18,8 +18,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FetchTrendingMusic {
+public class FetchTrendingMusic
+{
 
+    //global variables
     private YouTube youTube;
     private FetchTrendingMusicCallback callback;
     private Handler handler;
@@ -35,7 +37,8 @@ public class FetchTrendingMusic {
 
 
     //fetching trending music
-    public FetchTrendingMusic(YouTube youTube, FetchTrendingMusicCallback callback) {
+    public FetchTrendingMusic(YouTube youTube, FetchTrendingMusicCallback callback)
+    {
         this.youTube = youTube;
         this.callback = callback;
         this.handler = new Handler(Looper.getMainLooper());
@@ -43,6 +46,7 @@ public class FetchTrendingMusic {
             @Override
             public void run()
             {
+                //call methods
                 fetchTrendingSongs();
                 fetchTrendingHindiSongs();
 
@@ -80,7 +84,7 @@ public class FetchTrendingMusic {
                 YouTube.Videos.List videoDetailsList = youTube.videos().list("snippet, contentDetails");
                 videoDetailsList.setChart("mostPopular");
                 videoDetailsList.setVideoCategoryId("10");
-                videoDetailsList.setMaxResults(100L);
+                videoDetailsList.setMaxResults(120L);
                 videoDetailsList.setFields("items(id,snippet/title," +
                         "snippet/thumbnails/default/url,snippet/thumbnails/medium/url," +
                         "snippet/thumbnails/high/url,snippet/thumbnails/standard/url," +
@@ -137,7 +141,7 @@ public class FetchTrendingMusic {
             {
                 //first search hindi audio latest songs
                 YouTube.Search.List searchList = youTube.search().list("snippet");
-                searchList.setQ("Hindi latest songs");
+                searchList.setQ("Hindi latest trending songs");
                 searchList.setType("video");
                 searchList.setMaxResults(50L);
                 searchList.setVideoCategoryId("10");
@@ -174,7 +178,7 @@ public class FetchTrendingMusic {
             {
                 callback.onError("Failed to retrieve search results!!!");
             }//end of else
-        }
+        }//end of method
     }//end of async method
 
 
@@ -219,7 +223,7 @@ public class FetchTrendingMusic {
                     String audioDuration = formatDuration(video.getContentDetails().getDuration());
                     String videoUrl = "https://www.youtube.com/watch?v=" + videoId;
 
-                    // Add the video details to the list
+                    //add the video details to the list
                     youtubeModels.add(new YoutubeModel(videoId, audioTitle, audioImageUrl, videoUrl, audioDuration));
                 }//end of for
                 return youtubeModels;
@@ -237,7 +241,7 @@ public class FetchTrendingMusic {
         {
             if (youtubeModels != null)
             {
-                // Return the list of Hindi songs via the callback
+                //return the list of Hindi songs via the callback
                 callback.onFetchTrendingMusic(null, youtubeModels);
             }//end of if
         }//end of method

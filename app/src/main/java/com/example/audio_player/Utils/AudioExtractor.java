@@ -18,10 +18,17 @@ public class AudioExtractor {
         this.context = context;
     }
 
-    //public method to extract audio URL
+
+    //method to extract audio URL and pass through intent
     public void getAudioFileUrl(String videoUrl, Intent intent, ProgressBar progressBar) {
         new ExtractAudioTask(intent, progressBar).execute(videoUrl);
     }
+
+    //method to fetch url and pass that url to other methods
+    public void preFetchSongUrl(String videoUrl, SongUrlCallback callback) {
+        new PreFetchAudioTask(callback).execute(videoUrl);
+    }
+
 
     //asyncTask for extracting audio from video URL
     private class ExtractAudioTask extends AsyncTask<String, Void, String> {
@@ -67,4 +74,43 @@ public class AudioExtractor {
             context.startActivity(intent);
         }
     }
-}
+
+
+
+
+    //asyncTask for pre-fetching audio URL
+    private class PreFetchAudioTask extends AsyncTask<String, Void, String> {
+
+        private SongUrlCallback callback;
+
+        public PreFetchAudioTask(SongUrlCallback callback) {
+            this.callback = callback;
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String videoUrl = urls[0];
+
+            //call Python script to extract the audio URL
+            Python py = Python.getInstance();
+            PyObject pyObject = py.getModule("extract_audio");
+            PyObject result = pyObject.callAttr("extract_audio", videoUrl);
+
+            return result.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String audioUrl) {
+            //invoke callback with the extracted audio URL
+            if (callback != null) {
+                callback.onSongUrlExtracted(audioUrl);
+            }
+        }
+    }
+
+    //callback interface for pre-fetching audio URL
+    public interface SongUrlCallback
+    {
+        void onSongUrlExtracted(String audioUrl);
+    }
+}//end of class

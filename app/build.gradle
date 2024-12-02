@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.example.audio_player'
-    compileSdk 34
+    compileSdk 35
 
     buildFeatures {
         buildConfig true
@@ -36,7 +36,7 @@ android {
         }
 
         python {
-            buildPython "C:/Users/AMAAN/AppData/Local/Programs/Python/Python39/python.exe"
+            buildPython "C:/Users/AMAAN/AppData/Local/Programs/Python/Python313/python.exe"
         }
 
         python{
@@ -56,6 +56,11 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    packaging {
+        jniLibs {
+            useLegacyPackaging true
+        }
     }
 }
 

@@ -28,6 +28,7 @@ public class RecentSongsListAdapter extends RecyclerView.Adapter<RecentSongsList
     private final ClickEvent onItemClickListener;
     private final List<SongHistoryModel> songHistoryModels;
 
+    //constructor
     public RecentSongsListAdapter(Context context, List<SongHistoryModel> songHistoryModels, ClickEvent onItemClickListener) {
         this.context = context;
         this.songHistoryModels = songHistoryModels;
@@ -37,7 +38,7 @@ public class RecentSongsListAdapter extends RecyclerView.Adapter<RecentSongsList
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.raw_recent_list, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.raw_recently_played_list, parent, false);
         return new ViewHolder(view);
     }
 
@@ -66,15 +67,20 @@ public class RecentSongsListAdapter extends RecyclerView.Adapter<RecentSongsList
                 //show the bottom sheet with options
                 SongDetailsFragment bottomSheet = SongDetailsFragment.newInstance();
 
+                //pass song data
                 Bundle args = new Bundle();
                 args.putString("videoTitle", songHistoryModel.getSongTitle());
                 args.putString("duration", songHistoryModel.getSongDuration());
                 args.putString("imageUrl", songHistoryModel.getSongImageUrl());
                 bottomSheet.setArguments(args);
 
-                bottomSheet.setSongOptionsListener(new SongDetailsFragment.SongOptionsListener() {
+                //on click events of menu
+                bottomSheet.setSongOptionsListener(new SongDetailsFragment.SongOptionsListener()
+                {
+                    //when user clicks play now button
                     @Override
-                    public void onPlayNowClicked() {
+                    public void onPlayNowClicked()
+                    {
                         holder.progressBar.setVisibility(View.VISIBLE);
 
                         Intent i = new Intent(context, PlayAudio.class);
@@ -85,14 +91,17 @@ public class RecentSongsListAdapter extends RecyclerView.Adapter<RecentSongsList
                         audioExtractor.getAudioFileUrl(songHistoryModel.getVideoUrl(), i, holder.progressBar);
                     }
 
+                    //when user clicks play next button
                     @Override
                     public void onPlayNextClicked() {
                     }
 
+                    //when user clicks playlist button
                     @Override
                     public void onAddToPlaylistClicked() {
                     }
 
+                    //when user clicks favourite button
                     @Override
                     public void onAddToFavouritesClicked() {
                     }

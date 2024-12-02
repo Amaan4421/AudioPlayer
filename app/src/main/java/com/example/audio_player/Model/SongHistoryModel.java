@@ -2,12 +2,16 @@ package com.example.audio_player.Model;
 
 public class SongHistoryModel
 {
+    //global variables
     private int id;
     private String songTitle;
     private String songImageUrl;
     private String songVideoId;
     private String songDuration;
     private String videoUrl;
+
+
+    //getters and setters for song details
 
     public String getVideoUrl() {
         return videoUrl;

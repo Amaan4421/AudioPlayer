@@ -188,8 +188,9 @@ public class BackgroundPlayService extends MediaSessionService
         exoPlayer.play();
     }//end of method
 
+
+    //update the notification based on whether the player is playing or paused
     private void updateNotification() {
-        // Update your notification based on whether the player is playing or paused
         playerNotificationManager.setPlayer(exoPlayer);
     }
 

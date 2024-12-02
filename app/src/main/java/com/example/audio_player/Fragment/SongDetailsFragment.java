@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 public class SongDetailsFragment extends BottomSheetDialogFragment {
 
+    //listener for taking click events
     private SongOptionsListener optionsListener;
 
     public static SongDetailsFragment newInstance() {
@@ -29,9 +30,12 @@ public class SongDetailsFragment extends BottomSheetDialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.song_details_list, container, false);
+    @SuppressLint({"MissingInflatedId", "LocalSuppress", "ResourceType"})
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_song_details_list, container, false);
 
+        //get song details
         Bundle args = getArguments();
         String videoTitle = args != null ? args.getString("videoTitle") : "Unknown Title";
         String duration = args != null ? args.getString("duration") : "Unknown Duration";
@@ -44,18 +48,20 @@ public class SongDetailsFragment extends BottomSheetDialogFragment {
         TextView playNow = view.findViewById(R.id.play_now);
         TextView playNext = view.findViewById(R.id.play_next);
         TextView addToPlaylist = view.findViewById(R.id.add_to_playlist);
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView addToFavourites = view.findViewById(R.id.add_to_favourites);
+        TextView addToFavourites = view.findViewById(R.id.add_to_favourites);
 
+        //set song details
         songTitle.setText(videoTitle);
         songDuration.setText(duration);
         Picasso.get().load(imageUrl).into(songImage);
 
         //set click listeners for the options
         playNow.setOnClickListener(v -> {
-            if (optionsListener != null) {
+            if (optionsListener != null)
+            {
                 optionsListener.onPlayNowClicked();
             }
-            dismiss();
+            dismissAllowingStateLoss();
         });
 
         playNext.setOnClickListener(v -> {
@@ -81,6 +87,7 @@ public class SongDetailsFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+    //on click events method
     public interface SongOptionsListener {
         void onPlayNowClicked();
         void onPlayNextClicked();

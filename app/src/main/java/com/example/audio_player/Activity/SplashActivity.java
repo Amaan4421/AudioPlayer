@@ -18,7 +18,8 @@ public class SplashActivity extends AppCompatActivity {
     int time = 2000;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
@@ -33,6 +34,5 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         }, time);
-
-    }
-}
+    }//end of onCreate
+}//end of class

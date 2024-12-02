@@ -1,8 +1,14 @@
 package com.example.audio_player.Activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.DownloadManager;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -11,6 +17,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +33,7 @@ import com.example.audio_player.Model.YoutubeModel;
 import com.example.audio_player.R;
 import com.example.audio_player.Utils.AudioExtractor;
 import com.example.audio_player.Utils.FetchTrendingMusic;
-import com.example.audio_player.Utils.HistoryDatabaseHelper;
+import com.example.audio_player.database_helper.HistoryDatabaseHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.services.youtube.YouTube;
@@ -34,13 +42,13 @@ import com.google.api.services.youtube.YouTubeRequestInitializer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements FetchTrendingMusic.FetchTrendingMusicCallback
 {
     //final global variables
+    public static final int REQUEST_NOTIFICATION_PERMISSION = 1;
     private ListAdapter adapter;
     private ArrayList<YoutubeModel> searchResults;
     private YouTube youTube;
@@ -61,10 +69,12 @@ public class MainActivity extends AppCompatActivity implements FetchTrendingMusi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        requestNotificationPermissionToUser();
+
         //start the python
         if(!Python.isStarted())
         {
-            Python.start(new AndroidPlatform(this ));
+            Python.start(new AndroidPlatform(this));
         }
 
         //get ids from xml file
@@ -128,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements FetchTrendingMusi
             @Override
             public void onItemClick(YoutubeModel youtubeModel)
             {
-
                 Intent i = new Intent(MainActivity.this, PlayAudio.class);
                 i.putExtra("title", youtubeModel.getVideoTitle());
                 i.putExtra("image", youtubeModel.getVideoImageUrl());
@@ -270,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements FetchTrendingMusi
     private void loadRecentSongs()
     {
         //call helper class
-        HistoryDatabaseHelper db = new HistoryDatabaseHelper(this);
+        HistoryDatabaseHelper db = new HistoryDatabaseHelper(MainActivity.this);
         recentSongs = db.getSongHistory();
 
         Collections.reverse(recentSongs);
@@ -306,5 +315,20 @@ public class MainActivity extends AppCompatActivity implements FetchTrendingMusi
             recentSongsListAdapter.notifyDataSetChanged();
         }//end of else
     }//end of method
+
+
+
+    //ask permission for notification when user open app first time
+    private void requestNotificationPermissionToUser()
+    {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+            {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        REQUEST_NOTIFICATION_PERMISSION);
+            }
+        }
+    }
 }//end of class
 
