@@ -141,7 +141,7 @@ public class FetchTrendingMusic
             {
                 //first search hindi audio latest songs
                 YouTube.Search.List searchList = youTube.search().list("snippet");
-                searchList.setQ("Hindi latest trending songs");
+                searchList.setQ("Hindi latest songs");
                 searchList.setType("video");
                 searchList.setMaxResults(50L);
                 searchList.setVideoCategoryId("10");

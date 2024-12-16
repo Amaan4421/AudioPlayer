@@ -22,6 +22,7 @@ import com.example.audio_player.Fragment.UpNextSongFragment;
 import com.example.audio_player.Model.UpNextSongsModel;
 import com.example.audio_player.R;
 import com.example.audio_player.Services.BackgroundPlayService;
+import com.example.audio_player.Utils.ExoPlayerManager;
 import com.squareup.picasso.Picasso;
 
 import androidx.media3.common.MediaItem;
@@ -198,6 +199,8 @@ public class PlayAudio extends AppCompatActivity {
             Intent serviceIntent = new Intent(PlayAudio.this, BackgroundPlayService.class);
             serviceIntent.setAction("ACTION_PLAY");   //set action string to pass
             serviceIntent.putExtra("audioUrl", audioUrl);   //set url string to pass
+            serviceIntent.putExtra("title", title);
+            serviceIntent.putExtra("image", image);
             startService(serviceIntent);
         }//end of if
     }//end of onCreate
@@ -208,7 +211,7 @@ public class PlayAudio extends AppCompatActivity {
     private void initializePlayer(String audioUrl)
     {
         //build the exoplayer
-        player = new ExoPlayer.Builder(this).build();
+        player = ExoPlayerManager.getInstance(this);
 
         //pass url in media and set the player
         MediaItem mediaItem = MediaItem.fromUri(Uri.parse(audioUrl));
@@ -301,11 +304,12 @@ public class PlayAudio extends AppCompatActivity {
     protected void onStop()
     {
         super.onStop();
-        if (player != null)
-        {
-            player.release();
-            player = null;
-        }//end of if
+        ExoPlayerManager.releasePlayer();
+//        if (player != null)
+//        {
+//            player.release();
+//            player = null;
+//        }//end of if
 
         //to stop updating seek bar when song is not playing
         handler.removeCallbacks(updateSeekBar);

@@ -1,6 +1,6 @@
 [versions]
-agp = "8.7.2"
-androidGradle = "8.7.2"
+agp = "8.7.3"
+androidGradle = "8.7.3"
 core = "1.15.0"
 exoplayerCore = "2.19.1"
 googleApiClientAndroid = "2.7.0"
