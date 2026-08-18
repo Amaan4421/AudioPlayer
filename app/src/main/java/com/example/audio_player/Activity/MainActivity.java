@@ -6,6 +6,7 @@ import android.app.DownloadManager;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements FetchTrendingMusi
     ImageButton searchButton;
 
 
+
     //on create method to show screen UI
     @SuppressLint("MissingInflatedId")
     @Override
@@ -83,6 +85,30 @@ public class MainActivity extends AppCompatActivity implements FetchTrendingMusi
         RecyclerView searchListView = findViewById(R.id.searchList);
         RecyclerView hindiListView = findViewById(R.id.hindiRecyclerView);
 
+
+        //when user clicks globe button, open Gboard
+        ImageButton globeButton = findViewById(R.id.globeButton);
+        globeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                try {
+                    Intent intent = new Intent();
+                    intent.setClassName("com.google.android.inputmethod.latin",
+                            "com.android.inputmethod.latin.settings.SettingsActivity");
+                    startActivity(intent);
+                } catch (android.content.ActivityNotFoundException e) {
+                    // Gboard not installed, open Play Store listing
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=com.google.android.inputmethod.latin")));
+                    } catch (android.content.ActivityNotFoundException e2) {
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.inputmethod.latin")));
+                    }
+                }
+            }
+        });//end of globe on click method
 
         //when user clicks search button from toolbar, open search page
         searchButton.setOnClickListener(new View.OnClickListener() {
